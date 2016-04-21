@@ -1,0 +1,23 @@
+version: '2'
+services:
+  geminabox:
+    build: .
+    image: buildozer/geminabox
+    environment:
+        GITHUB_ORGANIZATION: organization
+        REDIS_URL: redis://redis:6379
+        SSL_CERTIFICATE: /certs/ssl.cer
+        SSL_INTERMEDIATE_CERTIFICATE_1: /certs/ssl-intermediate.cer
+        SSL_PRIVATE_KEY: /certs/ssl.key
+        SSL_PASSPHRASE: passphrase
+    volumes:
+        - ./certs:/certs
+        - ./data:/usr/src/app/data
+    depends_on:
+      - redis
+    ports:
+      - "443:443"
+    restart: unless-stopped
+  redis:
+    image: redis
+    restart: unless-stopped
